@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HALL MARK BANK</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .login-box, .reset-box {
+            margin-top: 10%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            width: 230px;
+            margin: auto;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 95%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .forgot-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+            color: red;
+        }
+
+        .error, .success {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+    
+</head>
+<body class="firstbody"><br><br>
+    <img src="copy hallmark.jpg" alt="" width="280px" height="100px" align="center">
+    <br>
+    <br>
+    <header align="center">HALLMARK BANK</header>
+    <br><br>
+    <marquee behavior="" direction="">Kindly Input your login details</marquee></h2>
+    <br>
+    <br>
+
+    <!-- Login Box -->
+    <div class="login-box" id="loginBox">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <a href="#" class="forgot-link" onclick="showSecurity()">Forgot Password?</a>
+        <p id="loginMessage" class="error"></p>
+    </div>
+
+    <!-- Security Question Box -->
+    <div class="security-box" id="securityBox" style="display: none;">
+        <h2 style="color: white;">Answer Security Question</h2>
+        <p style="color: white;">What is your nickname?</p>
+        <input type="text" id="securityAnswer" placeholder="Answer" required>
+        <button onclick="verifySecurity()">Verify</button>
+        <a style="color: white;" href="#" class="forgot-link" onclick="showLogin()">Back to Login</a>
+        <p id="securityMessage" class="error"></p>
+    </div>
+
+    <!-- Reset Password Box -->
+    <div class="reset-box" id="resetBox" style="display: none;">
+        <h2>Reset Password</h2>
+        <input type="password" id="newPassword" placeholder="Enter New Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+        <button onclick="resetPassword()">Reset Password</button>
+        <a href="#" class="forgot-link" onclick="showLogin()">Back to Login</a>
+        <p id="resetMessage" class="error"></p>
+    </div>
+
+    <script>
+        // Initial data (simulated database)
+        const userData = {
+            username: "davidjohnson204444@gmail.com",
+            password: "Confirm12345$",
+            securityAnswer: "Johnny", // Predefined answer to the question
+        };
+
+
+        // Show reset password form
+        function showReset() {
+            document.getElementById('securityBox').style.display = 'none';
+            document.getElementById('resetBox').style.display = 'block';
+        }
+        // Show Security password form
+        function showSecurity() {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('securityBox').style.display = 'block';
+        }
+
+        // Show login form
+        function showLogin() {
+            document.getElementById('resetBox').style.display = 'none';
+            document.getElementById('securityBox').style.display = 'none';
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('securityMessage').innerHtml = ''; // Clear messages
+            document.getElementById('resetMessage').innerHTML = ''; // Clear messages
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const message = document.getElementById('loginMessage');
+
+            if (username === userData.username && password === userData.password) {
+                // Redirect to another page after successful login
+                window.location.href = "home.html"; // Redirect to home.html
+            } else {
+                message.textContent = 'Invalid username or password.';
+            }
+        }
+        // Verify security question answer
+        function verifySecurity() {
+            const answer = document.getElementById('securityAnswer').value.trim();
+            const message = document.getElementById('securityMessage');
+
+            if (answer.toLowerCase() === userData.securityAnswer.toLowerCase()) {
+                showReset();
+            } else {
+                message.textContent = 'Incorrect answer, Please try again.';
+            }
+
+        }
+
+        // Reset password function
+        function resetPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const message = document.getElementById('resetMessage');
+
+            if (newPassword === '' || confirmPassword === '') {
+                message.textContent = 'All fields are required.';
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                message.textContent = 'Passwords do not match.';
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                message.textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+
+            // Update password in "database"
+            userData.password = newPassword;
+            message.innerHTML = '<span class="success">Password successfully updated!</span>';
+
+            setTimeout(() => {
+                showLogin(); // Redirect back to login
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
